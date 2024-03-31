@@ -1,20 +1,18 @@
 #include <iostream>
-#include <thread>
-#include "../include/chip8.hpp"
+#include <SDL2/SDL.h>
+
+#include "interpreter.hpp"
 
 int main(int argc, char** argv) {
-    Chip8 chip;
-
-    if(argc < 2) {
-        std::cout << "Specify the filename!" << std::endl;
+    if(argc < 3) {
+        std::cout << "Specify the cycle duration and a filename!" << std::endl;
         return -1;
     }
 
-    chip.LoadROM(argv[1]);
-    while(true) {
-        chip.Cycle();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    }
+
+    Interpreter inter(static_cast<double>(std::stoi(argv[1])));
+    inter.chip.LoadROM(argv[2]);
+    inter.loop();
     
     return 0;
 }
